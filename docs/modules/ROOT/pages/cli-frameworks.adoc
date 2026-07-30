@@ -1,0 +1,50 @@
+= CLI frameworks (overview)
+
+This page lists common Node.js CLI frameworks so you can see where *terminal-gui-prompts* can plug in. The library provides adapters that match these frameworks’ prompt APIs while using GUI promotion and terminal echo.
+
+== Argument parsing (commands & options)
+
+|===
+| Framework | Role | Notes
+| *Commander* | Define commands, options, help | Very popular; no built-in prompts
+| *Yargs* | Same | Pirate-themed; plugins for prompts
+| *Oclif* (Heroku) | Commands, flags, plugins | Used by Heroku CLI, Twilio
+| *Glow* / *Caporal* | Lightweight command defs | Less common
+|===
+
+These focus on parsing `process.argv` and defining commands. They don’t handle “type y/n” or “enter a value” by default; many CLIs add a prompt library for that.
+
+== Interactive prompt libraries
+
+|===
+| Framework | Role | Notes
+| *@inquirer/prompts* | Confirm, input, select, etc. | Modern Inquirer rewrite; modular
+| *Inquirer* (legacy) | Same | Still widely used; maintainers suggest migrating to @inquirer/prompts
+| *Enquirer* | Confirm, input, select, forms | Fast; used by Yeoman, many tools
+| *prompts* | Minimal prompt set | Small API
+| *Vorpal* | REPL + prompts | Less active
+|===
+
+These are where “confirm” and “input” live. *terminal-gui-prompts* can replace or wrap their confirm/input so that, when possible, the same API shows a Windows dialog and still echoes the question to the terminal.
+
+== Hybrid (parsing + prompts)
+
+|===
+| Framework | Role | Notes
+| *yargs-interactive* | Yargs + Inquirer-style prompts | Prompts for missing options
+| *interactive-commander* | Commander + Inquirer | Same idea for Commander
+|===
+
+These combine a parser with a prompt library. Our adapters target the *prompt* side (e.g. the Inquirer/prompts API they use under the hood).
+
+== Where we plug in
+
+*terminal-gui-prompts* provides:
+
+* A *generic* API: `confirm()`, `prompt()`, etc., for any CLI.
+* *Adapters* that match a framework’s prompt API so you can swap the implementation:
+** `@inquirer/prompts`-style confirm/input
+** `enquirer`-style confirm/input
+** (Others as needed)
+
+You keep your existing CLI structure and only change where you get `confirm` / `input` from; the rest of the framework (Commander, Yargs, etc.) is unchanged.

@@ -1,0 +1,20 @@
+= Concepts
+
+== Why promote to GUI?
+
+In a terminal, users often see "Proceed? (Y/n)" and must type `y` or press Enter. When the same process runs in a Windows console with a desktop, showing a native Yes/No dialog lets the user click "Yes" or press Enter (with Yes as default) without typing. The command still receives the same canonical result (`"y"` or `"n"`), so scripts and CLIs do not need to change.
+
+== Why always echo the prompt?
+
+If the terminal output is piped (e.g. `my-tool 2>&1 | tee log.txt` or into an AI), the recipient only sees what is written to stdout/stderr. If the library *only* showed a dialog and never printed the question, the log or AI would not know what was asked. So the library *always* writes the prompt text to stdout first; the *input* is then collected either from the GUI or from the terminal. That way both interactive users and pipes see the full picture.
+
+== When is GUI used?
+
+GUI is used when all of the following hold:
+
+* The process is on Windows (`process.platform === "win32"`).
+* Standard output is a TTY (interactive terminal).
+* `forceTerminal` is not set.
+* The environment is not treated as headless (e.g. no `SSH_CONNECTION`).
+
+Otherwise the library falls back to terminal prompts.

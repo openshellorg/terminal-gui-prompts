@@ -1,0 +1,33 @@
+= Binary protocol (CLI contract)
+
+This is the documented way to invoke the core binary and interpret its output. Any adapter (Node, Go, etc.) that spawns the binary must follow this.
+
+== Invocation
+
+*Binary name*: TBD (e.g. `tgp` or `terminal-gui-prompts`). Adapters may ship it as a sibling executable or expect it on PATH.
+
+*Subcommands*:
+
+*Confirm (Yes/No)*::
+  * Subcommand: `confirm`
+  * Options: `--message <text>` (required), `--default yes|no` (default: `yes`), optional `--title <text>`
+  * Stdout on success: exactly one line, either `y` or `n`
+  * Exit code: `0` = Yes, `1` = No (or cancelled/closed)
+
+*Input (single line of text)*::
+  * Subcommand: `input`
+  * Options: `--message <text>` (required), `--default <text>` (optional), optional `--title <text>`
+  * Stdout on success: exactly one line, the user’s input (or default if they confirmed without changing)
+  * Exit code: `0` = OK, `1` = cancelled/closed
+
+Arguments that contain newlines or special characters should be passed in a way that avoids ambiguity (e.g. env vars or length-prefixed if needed; TBD when implementing).
+
+== Adapter behaviour
+
+Adapters must:
+
+1. Write the prompt text to stdout *before* calling the binary (so pipes and logs see the question).
+2. If “use GUI” (e.g. TTY and GUI available): run the binary with the appropriate subcommand and args, read one line from stdout, return that value to the caller.
+3. If not: use normal terminal input (readline, etc.) and return the canonical value.
+
+They must *not* depend on the binary’s stderr or exit code for the *result* (exit code is for cancel vs OK; the actual value is always the single stdout line).

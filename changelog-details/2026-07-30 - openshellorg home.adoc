@@ -1,0 +1,15 @@
+= OpenShellOrg home
+:toc:
+
+== Why
+
+`terminal-gui-prompts` elevates interactive CLI confirm/input to native GUI dialogs when a TTY has a desktop, while always echoing the prompt text to stdout for pipes and automation. That is shell/CLI UX tooling — it belongs with OpenShellOrg (better shells and CLIs), not Dev-Centr (dev-machine orchestration and toolchain equivalence).
+
+== What changed
+
+* Canonical home: https://github.com/openshellorg/terminal-gui-prompts
+* On-disk path: `Z:\code\github.com\openshellorg\terminal-gui-prompts`
+* Antora component `terminal-gui-prompts` registered in `open-shell-org` playbooks (remote + local)
+* Ecosystem page lists the library under orientation and help companions
+* Go module path and distribution docs use the `openshellorg` owner
+* MIT `LICENSE`, allow-list `.gitignore`, and this changelog timeline

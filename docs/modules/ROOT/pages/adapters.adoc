@@ -1,0 +1,40 @@
+= Adapters for CLI frameworks
+
+*terminal-gui-prompts* can replace the confirm/input parts of existing prompt libraries so your CLI keeps the same structure but uses GUI promotion and terminal echo. Only the import (and optional options) change.
+
+== Supported frameworks
+
+|===
+| Framework | Adapter subpath | Replace
+| @inquirer/prompts | `terminal-gui-prompts/inquirer` | `confirm`, `input`
+| Enquirer | `terminal-gui-prompts/enquirer` | `promptConfirm`, `promptInput` (same question shape as Enquirer)
+|===
+
+Other frameworks (Commander, Yargs, Oclif) handle argument parsing; they often use Inquirer or Enquirer for prompts. Use the inquirer or enquirer adapter for the prompt calls and keep your parser as-is.
+
+== @inquirer/prompts
+
+Options and return types match `@inquirer/prompts`:
+
+* `confirm({ message, default?: boolean })` → `Promise<boolean>`
+* `input({ message, default?: string })` → `Promise<string>`
+
+Extensions: `forceTerminal?: boolean`, `title?: string` (dialog title when using GUI).
+
+[source,js]
+----
+import { confirm, input } from "terminal-gui-prompts/inquirer";
+const ok = await confirm({ message: "Continue?", default: true });
+const name = await input({ message: "Name?", default: "Guest" });
+----
+
+== Enquirer
+
+Enquirer uses a single `prompt()` with `{ type, name, message, default }` and returns `{ [name]: value }`. We provide:
+
+* `promptConfirm(question)` → `Promise<Record<string, boolean>>`
+* `promptInput(question)` → `Promise<Record<string, string>>`
+
+So you can destructure the same way: `const { proceed } = await promptConfirm({ name: 'proceed', message: '...', default: true })`.
+
+Extensions: `forceTerminal`, `title`.

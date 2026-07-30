@@ -1,0 +1,55 @@
+= Getting started
+
+== Installation
+
+[source,bash]
+----
+pnpm add terminal-gui-prompts
+----
+
+== Confirm (Yes/No)
+
+Use `confirm()` when the user must choose yes or no. The prompt is always printed; on Windows with a TTY and GUI, a native dialog is shown with Yes/No and the chosen default (e.g. "Yes" so Enter confirms).
+
+[source,js]
+----
+import { confirm, confirmBoolean } from "terminal-gui-prompts";
+
+const answer = await confirm({
+  message: "Delete all files?",
+  title: "Confirm",
+  default: "yes",
+});
+// answer is "y" or "n"
+
+const ok = await confirmBoolean({ message: "Continue?" });
+// ok is true or false
+----
+
+== Text prompt
+
+Use `prompt()` for a single line of text. On Windows with GUI, a small input dialog is shown; otherwise a terminal prompt with optional default.
+
+[source,js]
+----
+import { prompt } from "terminal-gui-prompts";
+
+const name = await prompt({
+  message: "Enter your name",
+  default: "Guest",
+});
+----
+
+If you use *@inquirer/prompts* or *Enquirer*, see xref:adapters.adoc[Adapters] to swap in this library with the same API. The repo `examples/` folder has runnable apps (see `examples/README.adoc`).
+
+== Force terminal
+
+To always use the terminal (e.g. in automation or when driving from another process), set `forceTerminal: true`:
+
+[source,js]
+----
+const answer = await confirm({
+  message: "Proceed?",
+  forceTerminal: true,
+});
+----

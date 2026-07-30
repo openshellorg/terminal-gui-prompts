@@ -1,0 +1,7 @@
+name "tgp"
+description "Terminal GUI Prompts core binary: confirm and input dialogs, one line to stdout."
+authors "terminal-gui-prompts"
+license "MIT"
+targetType "executable"
+sourcePaths "source"
+mainSourceFile "source/tgp/main.d"

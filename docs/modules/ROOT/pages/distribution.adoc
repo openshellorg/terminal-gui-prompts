@@ -1,0 +1,53 @@
+= Distribution and install
+
+There is no single installer. The project has two distribution surfaces: the *core binary* and the *language adapters*. Each language has its own package host; we can still register and publish everything from one repo using a single release workflow.
+
+== What we distribute
+
+* *Core binary* (`tgp`): One executable per platform (Windows, Linux, macOS). Built from the D project in `core/`. No runtime dependency on Node or PowerShell for the binary itself (it invokes them when needed for dialogs).
+* *Adapters*: One package per language, published to that language’s registry. Adapters depend on the core binary being available (bundled, on PATH, or via `TGP_BIN`).
+
+== Per-language package hosts
+
+|===
+| Language | Package host | Package name (suggested) | How users get it
+| JavaScript/TypeScript | npm (npmjs.com) | `terminal-gui-prompts` | `pnpm add terminal-gui-prompts`
+| Rust | crates.io | `terminal-gui-prompts` | `cargo add terminal-gui-prompts`
+| Go | proxy.golang.org (from GitHub tag) or GitHub | `github.com/openshellorg/terminal-gui-prompts/adapters/go` | `go get github.com/openshellorg/terminal-gui-prompts/adapters/go`
+| Python | PyPI | `terminal-gui-prompts` | `pip install terminal-gui-prompts`
+| C | Source only / vcpkg / Conan (optional) | — | Copy `adapters/c/` or add a recipe
+|===
+
+There is no single “central” registry that spans all languages. Each ecosystem has its own. What we *can* centralize is the *release process*: one tag, one workflow, many publishes.
+
+== Core binary: how to get it
+
+* *GitHub Releases*: On each release we attach built artifacts (`tgp.exe`, `tgp`, `tgp-macos`). Users download the right file and put it on PATH or set `TGP_BIN`.
+* *System package managers* (optional): One recipe each so the binary is installable without downloading by hand:
+** Windows: Chocolatey (`choco install tgp`), Scoop, or winget
+** macOS: Homebrew (`brew install tgp`)
+** Linux: Homebrew or a PPA / COPR / AUR recipe
+* *Bundled with an adapter*: The Node adapter can ship the binary inside the npm package (e.g. in `bin/` per platform) so `pnpm add terminal-gui-prompts` gives you both the library and the binary. Other adapters can document “install tgp from GitHub Releases or your package manager” or bundle it too.
+
+So: no standalone “installer” app; the core is distributed as a single executable (from Releases or a package manager), and optionally bundled by adapters.
+
+== Centralized release (one repo, one workflow)
+
+We can register and publish to all hosts from this repo using a single CI workflow (e.g. GitHub Actions) that runs on release or tag:
+
+. *Build the core* for Windows, Linux, and macOS (e.g. `dub build` in a matrix or on each runner).
+. *Upload core artifacts* to GitHub Releases (so each release page has the binaries).
+. *Publish adapters* to their registries in the same workflow:
+  * npm: `npm publish` (or `pnpm publish`) with `NPM_TOKEN`.
+  * crates.io: `cargo publish` with `CARGO_REGISTRY_TOKEN`.
+  * PyPI: `twine upload` or `uv publish` with `PYPI_API_TOKEN`.
+  * Go: no “publish” step; users `go get` from the repo; optionally push a Go module proxy.
+
+That way there is no separate “repackager” product: the monorepo plus one workflow is the central place. You tag a version once; the workflow builds the core, uploads it, and publishes each adapter to its host. Secrets (tokens) are stored in the repo’s CI environment.
+
+== Summary
+
+| Question | Answer
+| Is there an installer? | No single installer; the core is a single executable. Install it from GitHub Releases or (if we add recipes) Chocolatey / Homebrew / etc.
+| How are we distributing? | Core: GitHub Releases (and optionally system package managers). Adapters: npm, crates.io, PyPI, Go module from GitHub.
+| Can we register to all hosts easily? | Yes, by using one release workflow in this repo that builds the core and runs each ecosystem’s publish command. That’s the “centralized” way without a separate repackager.

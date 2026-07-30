@@ -1,0 +1,30 @@
+= Language adapters
+
+Adapters use the link:../docs/design/binary-protocol.adoc[TGP binary protocol]: they spawn the core binary when available and fall back to terminal input. All adapters are designed to work in CLI, Electron, and Tauri (set `TGP_BIN` to the path of the `tgp` binary if it is not on PATH).
+
+== Available adapters
+
+|===
+| Language | Path | Notes
+| JavaScript/TypeScript (Node, Electron, Tauri) | repo root (this package) | `import { confirm, prompt } from "terminal-gui-prompts"`. Subpaths: `terminal-gui-prompts/inquirer`, `terminal-gui-prompts/enquirer`.
+| Rust | link:rust/[adapters/rust] | Crate `terminal-gui-prompts`. `confirm(&opts)`, `prompt(&opts)`.
+| Go | link:go/[adapters/go] | `tgp.Confirm(opts)`, `tgp.Prompt(opts)`.
+| Python | link:python/[adapters/python] | `terminal_gui_prompts.confirm(...)`, `terminal_gui_prompts.prompt(...)`.
+| C | link:c/[adapters/c] | `tgp_confirm()`, `tgp_prompt()`. Header `tgp.h`, implementation `tgp.c`.
+|===
+
+== Building the core
+
+The core binary is required for GUI behaviour. Build it from the repo root:
+
+[source,bash]
+----
+cd core
+dub build
+----
+
+Then set `TGP_BIN` to the path of `core/tgp` (or `core/tgp.exe` on Windows), or copy it to a directory on PATH. The Node adapter also looks for the binary in `bin/` and `core/` relative to the package.
+
+== Adding an adapter for another language
+
+Follow the link:../docs/design/binary-protocol.adoc[binary protocol]: invoke `tgp confirm` or `tgp input` with the documented arguments and read exactly one line from stdout. Echo the prompt to stdout before calling the binary so that piped output and logs still show the question.

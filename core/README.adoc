@@ -1,0 +1,41 @@
+= TGP core binary
+
+Single executable that implements the link:../docs/design/binary-protocol.adoc[binary protocol]: `confirm` and `input` subcommands, one line to stdout.
+
+== Build
+
+Requires the D compiler (dmd or ldc) and DUB:
+
+[source,bash]
+----
+cd core
+dub build
+----
+
+Release build (smaller, faster):
+
+[source,bash]
+----
+dub build -b release
+----
+
+Output: `core/tgp` (Unix) or `core/tgp.exe` (Windows).
+
+== Behaviour
+
+Uses platform helpers for dialogs so one binary works everywhere:
+
+* Windows: PowerShell (scripts in `../scripts` or `TGP_SCRIPTS_DIR`), or inline PowerShell if scripts not found for confirm
+* Linux: zenity
+* macOS: osascript
+
+Set `TGP_SCRIPTS_DIR` to the directory containing `Show-ConfirmDialog.ps1` and `Show-InputDialog.ps1` when shipping the binary without sibling `scripts/`.
+
+== Protocol
+
+* `tgp confirm --message="..." [--title=...] [--default=yes|no]` → stdout: `y` or `n`, exit 0/1
+* `tgp input --message="..." [--title=...] [--default=...]` → stdout: one line of text, exit 0/1
+
+== Optional: DlangUI build
+
+A future build variant can use DlangUI for dialogs (single GUI stack, no PowerShell/zenity/osascript). The protocol stays the same.

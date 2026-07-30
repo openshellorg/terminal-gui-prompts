@@ -1,0 +1,49 @@
+= API reference
+
+== confirm(options)
+
+Prompts for Yes/No. Always writes `options.message` to stdout. On Windows with TTY and GUI, shows a native dialog; otherwise shows `(Y/n)` or `(y/N)` in the terminal.
+
+*Returns:* `Promise<"y" | "n">`
+
+Options:
+
+|===
+| Option | Type | Default | Description
+| `message` | string | (required) | Prompt text (always printed)
+| `title` | string | `"Confirm"` | Dialog title (GUI only)
+| `default` | `"yes"` \| `"no"` | `"yes"` | Default when user presses Enter
+| `forceTerminal` | boolean | `false` | If true, never use GUI
+| `input` | ReadableStream | `process.stdin` | Stream for terminal input
+| `output` | WritableStream | `process.stdout` | Stream for prompt output
+|===
+
+== confirmBoolean(options)
+
+Same as `confirm()` but returns `Promise<boolean>` (`true` = yes, `false` = no).
+
+== prompt(options)
+
+Prompts for a single line of text. Always writes `options.message` to stdout.
+
+*Returns:* `Promise<string>`
+
+Options:
+
+|===
+| Option | Type | Default | Description
+| `message` | string | (required) | Prompt text (always printed)
+| `title` | string | `"Input"` | Dialog title (GUI only)
+| `default` | string | `""` | Default/prefill value
+| `forceTerminal` | boolean | `false` | If true, never use GUI
+| `input` | ReadableStream | `process.stdin` | Stream for terminal input
+| `output` | WritableStream | `process.stdout` | Stream for prompt output
+|===
+
+== canUseWindowsGui()
+
+*Returns:* `boolean` — whether the current environment will use Windows GUI dialogs (Windows, not SSH, no `forceTerminal`). Useful to adjust messaging or to decide whether to show a dialog yourself.
+
+== showWindowsConfirm(options) / showWindowsInput(options)
+
+Low-level helpers that *only* show the Windows dialog (no terminal echo, no fallback). Use when you have already decided to use the GUI. Options: `message`, `title`, `default` (confirm: `"yes"` \| `"no"`; input: string).

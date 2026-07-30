@@ -1,0 +1,63 @@
+= Example apps
+
+Example apps that use *terminal-gui-prompts* (core API and adapters). Build output for each app is in that app’s `dist/` folder.
+
+== From repo root
+
+Install once (links workspace and example deps), then build the library and examples:
+
+[source,bash]
+----
+pnpm install
+pnpm build
+pnpm run build:examples
+----
+
+Run the script demo (no build; uses root `dist/`):
+
+[source,bash]
+----
+node examples/confirm-demo.mjs
+----
+
+Run an example app (build that example first):
+
+[source,bash]
+----
+pnpm --filter example-core-dialog build
+pnpm --filter example-core-dialog start
+----
+
+Or build and run all examples:
+
+[source,bash]
+----
+pnpm --filter example-core-dialog build
+pnpm --filter example-inquirer-app build
+pnpm --filter example-enquirer-app build
+pnpm --filter example-core-dialog start
+pnpm --filter example-inquirer-app start
+pnpm --filter example-enquirer-app start
+----
+
+== From an example folder
+
+[source,bash]
+----
+cd examples/core-dialog
+pnpm install
+pnpm build
+pnpm start
+----
+
+Build output is in `examples/core-dialog/dist/` (and similarly for the other apps).
+
+== What each example does
+
+|===
+| Example | Uses | Description
+| link:confirm-demo.mjs[confirm-demo.mjs] | Core | Single script; confirm + confirmBoolean (run with `node examples/confirm-demo.mjs`)
+| link:core-dialog[core-dialog] | Core `confirm` + `prompt` | Short wizard: confirm setup, prompt for name, confirm save
+| link:inquirer-app[inquirer-app] | Adapter `terminal-gui-prompts/inquirer` | Same API as @inquirer/prompts: confirm (boolean), input (string)
+| link:enquirer-app[enquirer-app] | Adapter `terminal-gui-prompts/enquirer` | Named answers: promptConfirm / promptInput return `{ [name]: value }`
+|===

@@ -1,0 +1,31 @@
+= Terminal GUI Prompts
+:description: Terminal prompts that promote to native Windows dialogs when a TTY has GUI; always echo prompt text for piping and AI.
+
+This module documents the *terminal-gui-prompts* library: terminal prompts that use native Windows dialogs when a TTY has GUI access, while always echoing the prompt text to stdout for piping and AI consumption.
+
+Part of https://github.com/openshellorg[OpenShellOrg] — standards and tooling for better shells and CLIs.
+
+== Overview
+
+* Terminal-first: prompt text is always printed so that `my-cli | cat` or piping to an AI still shows the question.
+* GUI promotion: on Windows, when the process has a TTY and a GUI, confirmations and text prompts are shown as native dialogs; the result is returned as the canonical value (`"y"`/`"n"` or the entered string).
+* Fallback: over SSH, in CI, or with `forceTerminal: true`, the library uses normal terminal input.
+
+== Examples
+
+Runnable apps are in the repository `examples/` folder: a script demo (`confirm-demo.mjs`) and three built apps (core-dialog, inquirer-app, enquirer-app), each with its own build in `examples/<name>/dist/`. See the repository `examples/README.adoc` for run instructions.
+
+== In this component
+
+* xref:getting-started.adoc[Getting started] — install and first use
+* xref:concepts.adoc[Concepts] — behaviour and promotion rules
+* xref:cli-frameworks.adoc[CLI frameworks] — parsers vs prompt libraries
+* xref:adapters.adoc[Adapters] — Inquirer / Enquirer drop-ins
+* xref:reference.adoc[API reference] — options and return values
+* xref:distribution.adoc[Distribution] — core binary + language packages
+
+== Related
+
+* xref:prohelp::index.adoc[prohelp] — progressive help for CLIs
+* xref:about::index.adoc[about] — machine orientation
+* xref:open-shell-org::ecosystem.adoc[Ecosystem]

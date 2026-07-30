@@ -1,0 +1,26 @@
+= Cross-platform core and adapters
+
+This doc describes the architecture: one core binary and language adapters that use a single *protocol*. The protocol is documented so that implementers can add support for other languages without changing the core.
+
+== Architecture
+
+* *Core binary*: One program (`tgp`) that shows confirm/input dialogs and prints the result to stdout. Implemented in **D**; on Windows it uses PowerShell scripts (or inline PowerShell) when `scripts/` is present; on Linux/macOS it uses zenity/osascript. One codebase, one binary per platform. Optional future: DlangUI build for a single GUI stack.
+* *Protocol*: The documented way to invoke the binary (subcommands and args) and the format of stdout. See link:binary-protocol.adoc[binary-protocol.adoc]. Anyone can implement an adapter in a new language by following the protocol; no need to implement dialogs themselves.
+* *Adapters*: Per-language libraries (Node/TS, Rust, Go, Python, C, etc.) that (1) write the prompt to stdout, (2) decide “use GUI?” (TTY and binary available), (3) if yes: spawn the core binary, read one line from stdout, return the value; if no: use the language’s normal terminal input. Works in CLI, Electron, and Tauri when the binary is on PATH or `TGP_BIN` is set.
+
+Downstream dev experience:
+
+* Use the adapter for your language (e.g. `terminal-gui-prompts` in Node, or the Rust crate). You don’t need to care about the core implementation.
+* The adapter needs the core binary (bundled, on PATH, or via `TGP_BIN`). On Windows, the Node adapter falls back to PowerShell when the binary is not found.
+
+== Protocol as fallback for new languages
+
+The binary protocol is the single contract. If you want to support a language we don’t ship an adapter for:
+
+* Implement a small library that (1) echoes the prompt to stdout, (2) spawns `tgp confirm` or `tgp input` with the documented args, (3) reads one line from stdout and returns it, (4) falls back to terminal readline when the binary is not available or not desired. No need to implement native dialogs; the core (or its platform helpers) does that.
+
+== Terminology
+
+* *Core* / *helper binary*: The `tgp` executable.
+* *Protocol*: The CLI and stdout format (see binary-protocol.adoc).
+* *Adapter*: A per-language library that uses the protocol and exposes `confirm` / `prompt` to the developer.

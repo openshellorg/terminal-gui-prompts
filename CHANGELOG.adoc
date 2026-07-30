@@ -1,0 +1,10 @@
+= Changelog
+:toc:
+
+All notable changes to this project will be documented here.
+
+For longer narratives, see link:changelog-details/[changelog-details/] (when present).
+
+== Timeline
+
+* 2026-07-30 — link:changelog-details/2026-07-30%20-%20openshellorg%20home.adoc[OpenShellOrg home] — library lives under `openshellorg`; Antora component wired into the docs hub.

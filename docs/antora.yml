@@ -1,0 +1,6 @@
+name: terminal-gui-prompts
+title: Terminal GUI Prompts
+version: ~
+start_page: ROOT:index.adoc
+nav:
+  - modules/ROOT/nav.adoc

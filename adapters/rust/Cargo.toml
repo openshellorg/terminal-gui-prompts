@@ -1,0 +1,10 @@
+[package]
+name = "terminal-gui-prompts"
+version = "0.1.0"
+edition = "2021"
+description = "Adapter for TGP: confirm and prompt with GUI when available"
+license = "MIT"
+
+[dependencies]
+which = "6"
+atty = "0.2"

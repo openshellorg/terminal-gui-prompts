@@ -1,0 +1,50 @@
+# Ignore everything by default (allow-list)
+*
+
+# Allow directory trees
+!*/
+!.github/
+!.github/workflows/
+!adapters/
+!adapters/**
+!core/
+!core/**
+!docs/
+!docs/**
+!examples/
+!examples/**
+!scripts/
+!scripts/**
+!src/
+!src/**
+!changelog-details/
+!changelog-details/**
+
+# Allow specific root files
+!.gitignore
+!README.adoc
+!CHANGELOG.adoc
+!LICENSE
+!MEMORIES.md
+!package.json
+!pnpm-lock.yaml
+!pnpm-workspace.yaml
+!tsconfig.json
+!.github/workflows/*.yml
+
+# Re-exclude build / deps / binaries even under allowed trees
+node_modules/
+**/node_modules/
+**/dist/
+**/*.exe
+**/*.pdb
+**/*.obj
+**/*.lib
+**/*.o
+**/*.local.*
+.env
+.DS_Store
+*.log
+.dub/
+**/core/tgp
+**/core/tgp.exe

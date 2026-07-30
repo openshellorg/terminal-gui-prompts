@@ -1,0 +1,63 @@
+{
+  "name": "terminal-gui-prompts",
+  "version": "0.1.0",
+  "description": "Terminal prompts that promote to native Windows dialogs when a TTY has GUI; always echo prompt text for piping/AI.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./inquirer": {
+      "types": "./dist/adapters/inquirer.d.ts",
+      "import": "./dist/adapters/inquirer.js",
+      "default": "./dist/adapters/inquirer.js"
+    },
+    "./enquirer": {
+      "types": "./dist/adapters/enquirer.d.ts",
+      "import": "./dist/adapters/enquirer.js",
+      "default": "./dist/adapters/enquirer.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:examples": "pnpm --filter example-core-dialog --filter example-inquirer-app --filter example-enquirer-app build",
+    "prepublishOnly": "pnpm run build"
+  },
+  "keywords": [
+    "terminal",
+    "cli",
+    "prompt",
+    "confirm",
+    "dialog",
+    "windows",
+    "gui",
+    "tty"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/openshellorg/terminal-gui-prompts.git"
+  },
+  "homepage": "https://opensh.org/open-shell-org/terminal-gui-prompts/",
+  "bugs": {
+    "url": "https://github.com/openshellorg/terminal-gui-prompts/issues"
+  },
+  "license": "MIT",
+  "files": [
+    "dist",
+    "scripts"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "typescript": "^5.6"
+  },
+  "dependencies": {
+    "@chenglou/pretext": "^0.0.4"
+  }
+}
