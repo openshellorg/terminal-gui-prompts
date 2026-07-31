@@ -136,7 +136,7 @@ From repo root: `pnpm install`, `pnpm build`, `pnpm run build:examples`; then ru
 
 == Docs
 
-Published Antora docs (via the OpenShellOrg hub): https://opensh.org/open-shell-org/terminal-gui-prompts/
+Published Antora docs (via the OpenShellOrg hub): https://openshellorg.github.io/docs/terminal-gui-prompts/
 
 == Changelog
 
