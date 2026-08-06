@@ -1,12 +1,39 @@
+ifndef::env-github[:icons: font]
+:toc: preamble
+:toclevels: 2
+:sectanchors:
+
+ifndef::env-github[]
+image:https://img.shields.io/github/contributors/openshellorg/terminal-gui-prompts.svg?style=for-the-badge[Contributors,link=https://github.com/openshellorg/terminal-gui-prompts/graphs/contributors]
+image:https://img.shields.io/github/forks/openshellorg/terminal-gui-prompts.svg?style=for-the-badge[Forks,link=https://github.com/openshellorg/terminal-gui-prompts/network/members]
+image:https://img.shields.io/github/stars/openshellorg/terminal-gui-prompts.svg?style=for-the-badge[Stars,link=https://github.com/openshellorg/terminal-gui-prompts/stargazers]
+image:https://img.shields.io/github/issues/openshellorg/terminal-gui-prompts.svg?style=for-the-badge[Issues,link=https://github.com/openshellorg/terminal-gui-prompts/issues]
+image:https://img.shields.io/github/license/openshellorg/terminal-gui-prompts.svg?style=for-the-badge[License,link=https://github.com/openshellorg/terminal-gui-prompts/blob/main/LICENSE]
+endif::[]
+
+ifdef::env-github[]
+image:https://img.shields.io/github/contributors/openshellorg/terminal-gui-prompts.svg?style=for-the-badge[Contributors]
+image:https://img.shields.io/github/forks/openshellorg/terminal-gui-prompts.svg?style=for-the-badge[Forks]
+image:https://img.shields.io/github/stars/openshellorg/terminal-gui-prompts.svg?style=for-the-badge[Stars]
+image:https://img.shields.io/github/issues/openshellorg/terminal-gui-prompts.svg?style=for-the-badge[Issues]
+image:https://img.shields.io/github/license/openshellorg/terminal-gui-prompts.svg?style=for-the-badge[License]
+endif::[]
+
 = Terminal GUI Prompts
+
+Terminal prompts that promote to native GUI dialogs when a TTY has a desktop; always echo prompt text for pipes/AI.
+
+link:https://opensh.org/open-shell-org/terminal-gui-prompts/[Explore the docs] ·
+link:https://github.com/openshellorg/terminal-gui-prompts/issues[Report Bug] ·
+link:https://github.com/openshellorg/terminal-gui-prompts/issues[Request Feature]
+
+== About The Project
 
 Enhanced terminal UI that promotes confirmations and text prompts to native Windows dialogs when the process has a TTY and GUI. The prompt text is *always* written to stdout so that piped output (e.g. to an AI or log) still shows the question—only the *input* is promoted to a modal when possible.
 
 Part of https://github.com/openshellorg[OpenShellOrg].
 
-== Why
-
-CLI tools often ask for `y`/`n` or a line of text. In an interactive Windows terminal with a GUI, users can instead get a native dialog with a default (e.g. "Yes") so that pressing Enter confirms without typing. The terminal still shows the menu text for scripting and piping; the library only elevates the *input* to the GUI and returns the canonical result to the command.
+CLI tools often ask for `y`/`n` or a line of text. In an interactive Windows terminal with a GUI, users can instead get a native dialog with a default (e.g. "Yes") so that pressing Enter confirms without typing.
 
 == Installation
 
@@ -15,15 +42,14 @@ CLI tools often ask for `y`/`n` or a line of text. In an interactive Windows ter
 pnpm add terminal-gui-prompts
 ----
 
-== Quick start
+== Usage
 
-*Confirm (Yes/No):*
+=== Confirm (Yes/No)
 
 [source,js]
 ----
 import { confirm, confirmBoolean } from "terminal-gui-prompts";
 
-// Returns "y" or "n"
 const answer = await confirm({
   message: "Delete all files in this folder?",
   title: "Confirm delete",
@@ -31,11 +57,10 @@ const answer = await confirm({
 });
 if (answer === "y") doDelete();
 
-// Or get a boolean
 const ok = await confirmBoolean({ message: "Continue?" });
 ----
 
-*Text prompt:*
+=== Text prompt
 
 [source,js]
 ----
@@ -48,105 +73,34 @@ const name = await prompt({
 });
 ----
 
-== Behaviour
+=== Behaviour
 
 * Always: the `message` is written to stdout (so pipes and logs see the question).
-* On Windows, with a TTY and no `forceTerminal`: a native dialog is shown; the result is returned as `"y"`/`"n"` or the entered string.
-* Otherwise (non-Windows, SSH, or `forceTerminal: true`): a normal terminal prompt is used (e.g. `(Y/n)` or `(default: x)`).
+* On Windows, with a TTY and no `forceTerminal`: a native dialog is shown.
+* Otherwise: a normal terminal prompt is used.
 
 Use `forceTerminal: true` to always use the terminal, e.g. in scripts.
 
-== CLI frameworks and adapters
+=== CLI framework adapters
 
-If you already use a prompt library, you can plug in *terminal-gui-prompts* via adapters that match the framework’s API so only the import changes.
-
-*Argument parsing (commands/options):* Commander, Yargs, Oclif — they define commands and flags; many CLIs add a separate prompt library for confirm/input.
-
-*Interactive prompts:*
-* *@inquirer/prompts* — confirm, input, select, etc. (modern Inquirer)
-* *Inquirer* (legacy) — same idea; maintainers suggest migrating to @inquirer/prompts
-* *Enquirer* — confirm, input, select, forms (used by Yeoman, many tools)
-* *prompts* — minimal prompt set
-
-*Hybrid:* yargs-interactive, interactive-commander (parser + Inquirer-style prompts).
-
-We provide drop-in style adapters for the prompt side so your existing CLI structure (e.g. Commander or Yargs) stays the same; you only change where you get `confirm` / `input` from.
-
-=== @inquirer/prompts adapter
-
-Same API as `confirm` and `input` from `@inquirer/prompts` (returns `boolean` and `string`). Swap the import:
-
-[source,js]
-----
-// import { confirm, input } from "@inquirer/prompts";
-import { confirm, input } from "terminal-gui-prompts/inquirer";
-
-const ok = await confirm({ message: "Continue?", default: true });
-const name = await input({ message: "Your name?", default: "Guest" });
-----
-
-Extra options (optional): `forceTerminal`, `title`.
-
-=== Enquirer adapter
-
-Enquirer uses `prompt({ type, name, message, default })` and returns `{ [name]: value }`. We expose `promptConfirm` and `promptInput` with that shape:
-
-[source,js]
-----
-import { promptConfirm, promptInput } from "terminal-gui-prompts/enquirer";
-
-const { proceed } = await promptConfirm({
-  name: "proceed",
-  message: "Continue?",
-  default: true,
-});
-const { username } = await promptInput({
-  name: "username",
-  message: "Username?",
-  default: "admin",
-});
-----
+Adapters for @inquirer/prompts and Enquirer are available. See link:examples/README.adoc[examples] and published docs: https://openshellorg.github.io/docs/terminal-gui-prompts/
 
 == API
 
 * `confirm(options)` → `Promise<"y" | "n">`
 * `confirmBoolean(options)` → `Promise<boolean>`
 * `prompt(options)` → `Promise<string>`
-* `canUseWindowsGui()` → `boolean` (whether GUI dialogs will be used on this run)
-* `showWindowsConfirm(options)` / `showWindowsInput(options)` — low-level Windows-only; use when you already know you want the dialog.
+* `canUseWindowsGui()` → `boolean`
 
-== Examples
-
-The link:examples/README.adoc[examples] folder includes runnable apps:
-
-* `confirm-demo.mjs` — script using core API (run with `node examples/confirm-demo.mjs` from repo root after `pnpm build`)
-* `core-dialog` — small wizard using `confirm` and `prompt`; build output in `examples/core-dialog/dist/`
-* `inquirer-app` — uses the Inquirer adapter; build in `examples/inquirer-app/dist/`
-* `enquirer-app` — uses the Enquirer adapter; build in `examples/enquirer-app/dist/`
-
-From repo root: `pnpm install`, `pnpm build`, `pnpm run build:examples`; then run an example with `pnpm --filter example-core-dialog start` or from an example folder `pnpm build && pnpm start`.
-
-== Development and architecture
-
-* *Core*: A single binary (`tgp`) built from the D project in `core/`. It implements the link:docs/design/binary-protocol.adoc[binary protocol] (confirm and input subcommands, one line to stdout). On Windows it uses PowerShell (scripts in `scripts/` or inline); on Linux/macOS it uses zenity/osascript. Build with `cd core && dub build`.
-* *Adapters*: This Node package is the JavaScript/TypeScript adapter. It prefers the core binary when present (`TGP_BIN` or binary in `bin/`/`core/`), and falls back to PowerShell on Windows. Other adapters (Rust, Go, Python, C) live in `adapters/` and use the same protocol. See link:adapters/README.adoc[adapters/README.adoc].
-* The protocol is documented so that new languages can add support without implementing dialogs; see link:docs/design/cross-platform-core.adoc[design/cross-platform-core.adoc].
-* Distribution and install (no single installer; core via GitHub Releases, adapters via npm/crates.io/PyPI/Go): link:docs/modules/ROOT/pages/distribution.adoc[distribution]. A link:.github/workflows/release.yml[release workflow] builds the core on tag push and uploads to GitHub Releases; adapter publish steps can be enabled with registry tokens.
-* Single root `tsconfig.json` for the library; each example has its own `tsconfig.json` and builds into its `dist/` folder.
-
-== Docs
-
-Published Antora docs (via the OpenShellOrg hub): https://openshellorg.github.io/docs/terminal-gui-prompts/
-
-== Changelog
-
-See link:CHANGELOG.adoc[CHANGELOG.adoc] for the timeline and link:changelog-details/[changelog-details/] for longer write-ups.
-
-== Requirements
-
-* Node 18+
-* Windows: PowerShell 7 (`pwsh`) or Windows PowerShell; .NET Windows Forms (default on desktop Windows). On non-Windows or without GUI, falls back to terminal prompts.
+See link:CHANGELOG.adoc[CHANGELOG.adoc].
 
 == License
 
-MIT
+MIT — see link:LICENSE[LICENSE].
+
+== Contact
+
+Open Shell Org — openshell@devcentr.org
+
+* Project: https://github.com/openshellorg/terminal-gui-prompts
+* Site: https://openshellorg.github.io
