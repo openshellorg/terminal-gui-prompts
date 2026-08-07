@@ -3,7 +3,30 @@ ifndef::env-github[:icons: font]
 :toclevels: 2
 :sectanchors:
 
-[[readme-top]]
+ifdef::env-github[]
+++++
+<a id="readme-top"></a>
+<div align="center">
+<a href="https://github.com/openshellorg/terminal-gui-prompts/graphs/contributors"><img src="https://img.shields.io/github/contributors/openshellorg/terminal-gui-prompts.svg?style=for-the-badge" alt="Contributors"></a>
+<a href="https://github.com/openshellorg/terminal-gui-prompts/network/members"><img src="https://img.shields.io/github/forks/openshellorg/terminal-gui-prompts.svg?style=for-the-badge" alt="Forks"></a>
+<a href="https://github.com/openshellorg/terminal-gui-prompts/stargazers"><img src="https://img.shields.io/github/stars/openshellorg/terminal-gui-prompts.svg?style=for-the-badge" alt="Stars"></a>
+<a href="https://github.com/openshellorg/terminal-gui-prompts/issues"><img src="https://img.shields.io/github/issues/openshellorg/terminal-gui-prompts.svg?style=for-the-badge" alt="Issues"></a>
+<a href="https://github.com/openshellorg/terminal-gui-prompts/blob/main/LICENSE"><img src="https://img.shields.io/github/license/openshellorg/terminal-gui-prompts.svg?style=for-the-badge" alt="License"></a>
+<br />
+<h3 align="center">Terminal GUI Prompts</h3>
+<p align="center">
+Terminal prompts that promote to native GUI dialogs when a TTY has a desktop; always echo prompt text for pipes/AI.<br />
+<a href="https://opensh.org/open-shell-org/terminal-gui-prompts/">Explore the docs</a><br />
+<br />
+<a href="https://github.com/openshellorg/terminal-gui-prompts/issues">Report Bug</a>
+&middot;
+<a href="https://github.com/openshellorg/terminal-gui-prompts/issues">Request Feature</a>
+</p>
+</div>
+++++
+endif::[]
+
+ifndef::env-github[]
 image:https://img.shields.io/github/contributors/openshellorg/terminal-gui-prompts.svg?style=for-the-badge[Contributors,link=https://github.com/openshellorg/terminal-gui-prompts/graphs/contributors]
 image:https://img.shields.io/github/forks/openshellorg/terminal-gui-prompts.svg?style=for-the-badge[Forks,link=https://github.com/openshellorg/terminal-gui-prompts/network/members]
 image:https://img.shields.io/github/stars/openshellorg/terminal-gui-prompts.svg?style=for-the-badge[Stars,link=https://github.com/openshellorg/terminal-gui-prompts/stargazers]
@@ -17,6 +40,7 @@ Terminal prompts that promote to native GUI dialogs when a TTY has a desktop; al
 link:https://opensh.org/open-shell-org/terminal-gui-prompts/[Explore the docs] ·
 link:https://github.com/openshellorg/terminal-gui-prompts/issues[Report Bug] ·
 link:https://github.com/openshellorg/terminal-gui-prompts/issues[Request Feature]
+endif::[]
 
 == About The Project
 
@@ -26,8 +50,9 @@ Part of https://github.com/openshellorg[OpenShellOrg].
 
 CLI tools often ask for `y`/`n` or a line of text. In an interactive Windows terminal with a GUI, users can instead get a native dialog with a default (e.g. "Yes") so that pressing Enter confirms without typing.
 
-link:#readme-top[back to top]
-
+++++
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+++++
 == Installation
 
 [source,bash]
@@ -35,8 +60,9 @@ link:#readme-top[back to top]
 pnpm add terminal-gui-prompts
 ----
 
-link:#readme-top[back to top]
-
+++++
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+++++
 == Usage
 
 === Confirm (Yes/No)
@@ -80,8 +106,9 @@ Use `forceTerminal: true` to always use the terminal, e.g. in scripts.
 
 Adapters for @inquirer/prompts and Enquirer are available. See link:examples/README.adoc[examples] and published docs: https://openshellorg.github.io/docs/terminal-gui-prompts/
 
-link:#readme-top[back to top]
-
+++++
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+++++
 == API
 
 * `confirm(options)` → `Promise<"y" | "n">`
@@ -95,8 +122,9 @@ See link:CHANGELOG.adoc[CHANGELOG.adoc].
 
 MIT — see link:LICENSE[LICENSE].
 
-link:#readme-top[back to top]
-
+++++
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+++++
 == Contact
 
 Open Shell Org — openshell@devcentr.org
@@ -104,4 +132,6 @@ Open Shell Org — openshell@devcentr.org
 * Project: https://github.com/openshellorg/terminal-gui-prompts
 * Site: https://openshellorg.github.io
 
-link:#readme-top[back to top]
+++++
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+++++
