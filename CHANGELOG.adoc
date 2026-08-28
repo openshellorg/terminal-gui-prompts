@@ -7,4 +7,5 @@ For longer narratives, see link:changelog-details/[changelog-details/] (when pre
 
 == Timeline
 
+* 2026-08-28 — README points to OpenShellOrg xref host-native-widgets (structured host widget channel generalizing confirm/text dialogs).
 * 2026-07-30 — link:changelog-details/2026-07-30%20-%20openshellorg%20home.adoc[OpenShellOrg home] — library lives under `openshellorg`; Antora component wired into the docs hub.

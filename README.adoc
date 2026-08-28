@@ -48,6 +48,9 @@ Enhanced terminal UI that promotes confirmations and text prompts to native Wind
 
 Part of https://github.com/openshellorg[OpenShellOrg].
 
+Architecture generalization (host widget channel beyond confirm/text dialogs):
+link:https://openshellorg.github.io/docs/shell-architecture/host-native-widgets.html[Host native widgets] in `openshellorg/shell-architecture`.
+
 CLI tools often ask for `y`/`n` or a line of text. In an interactive Windows terminal with a GUI, users can instead get a native dialog with a default (e.g. "Yes") so that pressing Enter confirms without typing.
 
 ++++
