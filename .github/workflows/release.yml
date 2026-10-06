@@ -21,7 +21,7 @@ jobs:
             artifact: tgp
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install D (Ubuntu)
         if: matrix.os == 'ubuntu-latest'
@@ -48,7 +48,7 @@ jobs:
           DUBCONFIG: ${{ matrix.os == 'ubuntu-latest' && '--arch=x86_64' || '' }}
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: tgp-${{ matrix.os }}
           path: core/${{ matrix.artifact }}
@@ -60,12 +60,12 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Download all core artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: artifacts
 
@@ -89,7 +89,7 @@ jobs:
           ls -la release/
 
       - name: Create Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           draft: true
           files: release/*
@@ -102,11 +102,11 @@ jobs:
   #   needs: release
   #   runs-on: ubuntu-latest
   #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: pnpm/action-setup@v4
+  #     - uses: actions/checkout@v7
+  #     - uses: pnpm/action-setup@v6
   #       with:
   #         version: 10
-  #     - uses: actions/setup-node@v4
+  #     - uses: actions/setup-node@v7
   #       with:
   #         node-version: '20'
   #         cache: 'pnpm'
@@ -120,15 +120,15 @@ jobs:
   #   needs: release
   #   runs-on: ubuntu-latest
   #   steps:
-  #     - uses: actions/checkout@v4
+  #     - uses: actions/checkout@v7
   #     - run: cargo publish --manifest-path adapters/rust/Cargo.toml --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
   #
   # publish-pypi:
   #   needs: release
   #   runs-on: ubuntu-latest
   #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-python@v5
+  #     - uses: actions/checkout@v7
+  #     - uses: actions/setup-python@v7
   #       with:
   #         python-version: '3.11'
   #     - run: pip install build twine
