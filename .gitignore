@@ -48,3 +48,5 @@ node_modules/
 .dub/
 **/core/tgp
 **/core/tgp.exe
+!/.editorconfig
+!/.gitattributes
